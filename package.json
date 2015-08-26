@@ -1,0 +1,33 @@
+{
+  "name": "node-ipgeoblock",
+  "version": "0.1.0",
+  "description": "Middleware to allow or block requests based on origin country.",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ilich/node-ipgeoblock.git"
+  },
+  "keywords": [
+    "security",
+    "express",
+    "connect",
+    "firewall",
+    "ip",
+    "maxmind",
+    "geoip2",
+    "geoip"
+  ],
+  "author": "Ilya Verbitskiy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ilich/node-ipgeoblock/issues"
+  },
+  "homepage": "https://github.com/ilich/node-ipgeoblock#readme",
+  "devDependencies": {
+    "connect": "^3.4.0",
+    "mocha": "^2.2.5",
+    "supertest": "^1.0.1"
+  }
+}
