@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Middleware to allow or block requests based on origin country.",
   "scripts": {
-    "test": "test"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
