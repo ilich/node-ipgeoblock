@@ -39,7 +39,6 @@ module.exports = function (options) {
 		return ip;
 	}
 	
-	
 	function isBlocked(ip, res) {
 		// 1. Check that IP address is blocked
 		if (options.blocked.indexOf(ip) > -1) {
