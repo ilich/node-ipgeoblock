@@ -78,3 +78,18 @@ app.use(ipgeoblock({
 	blockedCountries: [ "FR", "GB", "DE" ]
 }));
 ```
+
+Get country information for a request
+--------------------------------------------
+
+Node-ipgeoblock adds IP country information to the request object.
+
+```javascript
+app.use(function (req, res) {
+	// MaxMind GeoLite2 country object
+	console.log(JSON.stringofy(req.location.country.data));
+	
+	// Country ISO 3166-2 code
+	console.log(JSON.stringofy(req.location.country.isoCode));
+});
+```

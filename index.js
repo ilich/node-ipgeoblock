@@ -39,33 +39,45 @@ module.exports = function (options) {
 		return ip;
 	}
 	
-	function isBlocked(ip, res) {
+	function isBlocked(ip, req, res) {
+		req.location = req.location || {};
+		req.location.country = {
+			data: null,
+			isoCode: ""
+		};
+		
 		// 1. Check that IP address is blocked
 		if (options.blocked.indexOf(ip) > -1) {
 			return true;
 		}
 		
+		var blocked = false;
 		var query = mmdb.lookup(ip);
 		if (options.blockedCountries.length > 0) {
 			
 			// 2. If user added country to Blocked Countries collection then only those countries 
             // are blocked 
 				
-			return query !== null && options.blockedCountries.indexOf(query.country.iso_code) > -1;	
+			blocked = query !== null && options.blockedCountries.indexOf(query.country.iso_code) > -1;	
 		} else if (options.allowedCountries.length > 0) {
 			
 			// 3. If user added country to Allowed Countries collecction then all countries except allowed
             // are blocked
 				
-			return query === null || options.allowedCountries.indexOf(query.country.iso_code) === -1;
+			blocked = query === null || options.allowedCountries.indexOf(query.country.iso_code) === -1;
 		}
 		
-		return false;
+		if (!blocked && query !== null) {
+			req.location.country.data = query;
+			req.location.country.isoCode = query.country.iso_code;	
+		}
+		
+		return blocked;
 	}
 	
 	return function (req, res, next) {
 		var ip = getIP(req);
-		if (isBlocked(ip, res)) {
+		if (isBlocked(ip, req, res)) {
 			res.statusCode = 403;
 			res.end("Forbidden");
 			return;	

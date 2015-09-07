@@ -21,6 +21,7 @@ describe("node-ipgeoblock", function () {
 		}));
 		
 		app.use(function (req, res) {
+			res.setHeader("x-test-country", req.location.country.isoCode);
 			res.end("OK");
 		});	
 		
@@ -39,6 +40,7 @@ describe("node-ipgeoblock", function () {
 	it("allow IP address when IP blacklist is used", function (done) {
 		request(app).get("/")
 			.set("x-client-ip", "192.168.0.2")
+			.expect("x-test-country", "")
 			.expect(200)
 			.expect("OK", done);
 	});
@@ -53,6 +55,7 @@ describe("node-ipgeoblock", function () {
 	it("allow Greece IP address when ony only France is in blacklist", function (done) {
 		request(app).get("/")
 			.set("x-client-ip", "46.246.128.0")
+			.expect("x-test-country", "GR")
 			.expect(200)
 			.expect("OK", done);
 	});
@@ -60,6 +63,7 @@ describe("node-ipgeoblock", function () {
 	it("allow unknown IP address when ony only France is in blacklist", function (done) {
 		request(app).get("/")
 			.set("x-client-ip", "192.168.0.2")
+			.expect("x-test-country", "")
 			.expect(200)
 			.expect("OK", done);
 	});
@@ -69,6 +73,7 @@ describe("node-ipgeoblock", function () {
 		
 		request(appWhitelist).get("/")
 			.set("x-client-ip", "213.128.63.255")
+			.expect("x-test-country", "FR")
 			.expect(200)
 			.expect("OK", done);
 	});
