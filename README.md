@@ -90,6 +90,6 @@ app.use(function (req, res) {
 	console.log(JSON.stringofy(req.location.country.data));
 	
 	// Country ISO 3166-2 code
-	console.log(JSON.stringofy(req.location.country.isoCode));
+	console.log(req.location.country.isoCode);
 });
 ```
