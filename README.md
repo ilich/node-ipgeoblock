@@ -87,7 +87,7 @@ Node-ipgeoblock adds IP country information to the request object.
 ```javascript
 app.use(function (req, res) {
 	// MaxMind GeoLite2 country object
-	console.log(JSON.stringofy(req.location.country.data));
+	console.log(JSON.stringify(req.location.country.data));
 	
 	// Country ISO 3166-2 code
 	console.log(req.location.country.isoCode);
