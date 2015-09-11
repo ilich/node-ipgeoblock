@@ -4,7 +4,12 @@ var fs = require("fs");
 var requestIp = require("request-ip");
 var MMDBReader = require("mmdb-reader");
 
-module.exports = function (options) {
+module.exports = function (options, accessDenied) {
+	
+	accessDenied = accessDenied || function (req, res) {
+		res.statusCode = 403;
+		res.end("Forbidden");
+	};
 	
 	options = options || {};
 	verifyOptions(options);
@@ -78,8 +83,7 @@ module.exports = function (options) {
 	return function (req, res, next) {
 		var ip = getIP(req);
 		if (isBlocked(ip, req, res)) {
-			res.statusCode = 403;
-			res.end("Forbidden");
+			accessDenied(req, res);
 			return;	
 		}
 		

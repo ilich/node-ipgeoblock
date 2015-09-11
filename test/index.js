@@ -7,18 +7,24 @@ var request = require("supertest");
 
 describe("node-ipgeoblock", function () {
 	
-	function createApp(isWhitelist) {
+	function createApp(isWhitelist, accessDenied) {
 		var blacklist = isWhitelist ? [] : ["FR"];
 		var whitelist = isWhitelist ? ["FR"] : [];
 		
-		var app = connect();
-		
-		app.use(ipgeoblock({
+		var filterOption = {
 			geolite2: "./test/GeoLite2-Country.mmdb",
 			blocked: ["192.168.0.1", "192.168.0.3", "192.168.0.4"],
 			blockedCountries: blacklist,
 			allowedCountries: whitelist
-		}));
+		};
+		
+		var app = connect();
+		
+		if (accessDenied) {
+			app.use(ipgeoblock(filterOption, accessDenied));
+		} else {
+			app.use(ipgeoblock(filterOption));	
+		}
 		
 		app.use(function (req, res) {
 			res.setHeader("x-test-country", req.location.country.isoCode);
@@ -29,6 +35,18 @@ describe("node-ipgeoblock", function () {
 	}
 	
 	var app = createApp(false);
+	
+	it("block specific IP address with custom error handler", function (done) {
+		var app = createApp(false, function (req, res) {
+			res.statusCode = 500;
+			res.end("Internal Server Error");	
+		});
+		
+		request(app).get("/")
+			.set("x-client-ip", "192.168.0.1")
+			.expect(500)
+			.expect("Internal Server Error", done);
+	});
 	
 	it("block specific IP address", function (done) {
 		request(app).get("/")
