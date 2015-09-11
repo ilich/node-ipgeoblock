@@ -93,3 +93,20 @@ app.use(function (req, res) {
 	console.log(req.location.country.isoCode);
 });
 ```
+
+Custom access denied error hander
+--------------------------------------------
+
+```javascript
+var ipgeoblock = require("node-ipgeoblock");
+
+var app = express();
+
+app.use(ipgeoblock({
+	geolite2: "./GeoLite2-Country.mmdb",
+	blocked: ["192.168.0.1", "192.168.0.3", "192.168.0.4"]
+}, function (req, res) {
+	res.statusCode = 500;
+	res.end("Internal Server Error");
+}));
+```
