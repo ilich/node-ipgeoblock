@@ -23,7 +23,7 @@ module.exports = function (options, accessDenied) {
 		
 		// Check that geolite2 exists (fs.exists is deprecated)
 		var geo2 = fs.openSync(options.geolite2, "r");
-		fs.close(geo2);
+		fs.closeSync(geo2);
 		
 		options.blocked = options.blocked || [];
 		options.blockedCountries = options.blockedCountries || [];
